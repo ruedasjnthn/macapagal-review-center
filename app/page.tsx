@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { CountUp } from "./count-up";
 import { EarlyBirdPromoModal } from "./early-bird-promo-modal";
 import { HomePassersShowcase, type HomePasser } from "./home-passers-showcase";
 import { HeroReveal, Reveal } from "./motion-primitives";
@@ -9,17 +10,20 @@ import { FACEBOOK_PAGE_URL } from "./site-links";
 const glanceMetrics = [
   {
     title: "Student Passers",
-    value: "000+",
+    value: 1000,
+    suffix: "+",
     caption: "Across the Philippines",
   },
   {
     title: "Schools Represented",
-    value: "00+",
+    value: 50,
+    suffix: "+",
     caption: "Review-ready campus communities",
   },
   {
     title: "Review Batches",
-    value: "00+",
+    value: 25,
+    suffix: "+",
     caption: "Guided board exam preparation",
   },
 ];
@@ -86,43 +90,67 @@ const secondaryProgram = {
 
 const successProofs: HomePasser[] = [
   {
-    name: "Engr. Michael Tomas M. Par, RME",
-    school: "FEU Institute of Technology · Batch 2011",
-    batch: "2021 Registered Master Electrician Licensure Examination",
-    credential: "10th Placer · 87% Board Exam Rating",
+    name: "Engr. Cedie Mara A. Magno",
+    school: "University of the Philippines Los Baños · Batch 2024",
+    batch: "August 2024 Registered Electrical Engineer Licensure Examination",
+    credential: "2nd Placer",
     storyType: "testimonial",
     story:
-      "Hanggang ngayon hindi pa din ako makapaniwala. Mahirap kasi working at karamihan sa mga kasabayan ko ay fresh graduates, pero sa tulong ng Diyos, pumasa ako—nag-Top pa ako sa RME Board Exams. Di kayo mapapabayaan sa Macapagal Review; interactive sila magturo at talagang maiintindihan mo.",
-    image: {
-      src: "/passers/rme/2021/passer-001.jpg",
-      alt: "Engr. Michael Tomas M. Par, 2021 RME board exam 10th placer",
-    },
+      "I am forever grateful to Macapagal Review Center for their unwavering support to us enrollees during our review period. Board exam level lang yung difficulty ng mga practice problems nila dito kaya nakakaboost ng self-esteem kasi kayang kaya masolve! I consider niyo po itong Macapagal kung naghahanap kayo ng RC. Maganda ang emotional support ng mga instructors at marami kayong matututunan na lumalabas talaga sa actual boards.",
   },
   {
-    name: "Kim Renz N. Maladaga, RME",
-    batch: "September 2022 Registered Master Electrician Board Exam",
-    credential:
-      "10th Placer · 90.50% Board Exam Rating · Technical 89% · PEC 92%",
-    storyType: "achievement",
-    story:
-      "Kim Renz N. Maladaga earned 10th place in the September 2022 Registered Master Electrician Board Exam, achieving a 90.50% overall rating with 89% in Technical subjects and 92% in PEC.",
-    image: {
-      src: "/passers/rme/september-2022/passer-005.jpg",
-      alt: "Kim Renz N. Maladaga, September 2022 RME board exam 10th placer",
-    },
-  },
-  {
-    name: "Engr. Von Kleo Barsabal Marcuelo",
-    school: "Central Philippine University · Cum Laude",
-    batch: "April 2022 Registered Electrical Engineer Board Exam",
-    credential: "6th Placer · 89% Board Exam Rating",
+    name: "Engr. Ma. Julianna A. Torres",
+    school: "University of the Philippines Los Baños · Batch 2024",
+    batch: "August 2024 Registered Electrical Engineer Licensure Examination",
+    credential: "7th Placer",
     storyType: "testimonial",
     story:
-      "Thank you Macapagal Review and Training Center sa pagtulong sa akin para makamit yung pangarap kong maging Top. Sila Sir Macapagal at ibang teachers ay very approachable at parang pamilya na pwede mong i-trust during review. Isa sa nag-help talaga sa akin para maging Top ay ang materials at sobrang organized na pagtuturo.",
-    image: {
-      src: "/passers/ree/april-2022/passer-012.jpg",
-      alt: "Engr. Von Kleo Barsabal Marcuelo, April 2022 REE board exam 6th placer",
-    },
+      "Maraming salamat Macapagal Review and Training Center sa pagbibigay ng magaan pero effective na review experience sa akin. Sobrang laking tulong ng review style at positive energy niyo para gumaan at tumatag ang loob ko para sa examination. Grabe ang pag-aalaga sa reviewees! Super grateful ako sa inyo and more power, MRTC. Happy po akong makabawi through being a topnotcher.",
+  },
+  {
+    name: "Engr. John Dominic A. Agoncillo",
+    school: "University of the Philippines Los Baños",
+    batch: "April 2024 Registered Electrical Engineer Licensure Examination",
+    credential: "4th Placer",
+    storyType: "testimonial",
+    story:
+      "Nag-start akong mag-review for board exam way back January 2024 and itong Macapagal Review and Training Center ang aking pinasok. Hinding-hindi ako nagkamali sa pagpili sa MRTC kasi naging super helpful sila sa akin as someone na fresh grad. Ang dami kong natutunan na bago, pati shortcuts and techniques na nagamit ko sa boards. Super thankful ako na MRTC yung naging avenue ko for achieving my dreams.",
+  },
+  {
+    name: "Engr. Adrian B. Ramos",
+    school: "University of the Philippines Los Baños",
+    batch: "April 2024 Registered Electrical Engineer Licensure Examination",
+    credential: "7th Placer",
+    storyType: "testimonial",
+    story:
+      "MRTC na magpo-provide sa iyo ng mga necessary materials for you to pass the boards. They will also help you strategize what topics to focus on that will maximize your chances of passing. They also provide guidance and tips sa mga do's and don'ts sa actual exam, which is very helpful. All you have to do is attend the class and prepare for quizzes and preboards.",
+  },
+  {
+    name: "Engr. Chrizelle Alexis Kue Amyan",
+    school: "University of the Philippines Los Baños",
+    batch: "April 2024 Registered Electrical Engineer Licensure Examination",
+    credential: "10th Placer",
+    storyType: "testimonial",
+    story:
+      "Marami akong natutunan sa Macapagal Review Center. Sobrang bait ng kanilang instructors na sina Engr. Jervin at Engr. Clark at talagang marami silang maibabahaging techniques sa kanilang reviewees. Yung difficulty ng pre-board examinations nila ay kapareho na rin ng actual board exam. I can vouch that they will guide you from the start of the review until the day of your actual board exam.",
+  },
+  {
+    name: "Engr. Lemuel Jan Naval, RME",
+    school: "Batangas State University",
+    batch: "April 2024 Registered Master Electrician Licensure Examination",
+    credential: "9th Placer",
+    storyType: "testimonial",
+    story:
+      "They truly serve quality and easy-to-absorb teaching methods and reviewers, always direct to the point while making learning enjoyable with sensible puns and mnemonics. Dito ko napatunayan na hindi ako nagkamali sa pagpili sa kanila. Nagawa kong maipasa nang malumanay ang dalawang eksaminasyong REE at RME at pinalad pa na maging RME topnotcher.",
+  },
+  {
+    name: "Engr. Amiel Ohween B. Anay, RME",
+    school: "Technological University of the Philippines Manila",
+    batch: "September 2023 Registered Master Electrician Licensure Examination",
+    credential: "7th Placer",
+    storyType: "testimonial",
+    story:
+      "During my review, malaking tulong po ang mga reliable practice exams and pagiging kalmado ni Engr. Jervin sa pagtuturo. May 24/7 chat support at kahit anong itanong tungkol sa review and pag-file ng boards ay masasagot. The learning environment ay nakakaboost ng morale at nakakasipag dahil nahihimay-himay ang bawat discussion. Solid talaga sa Macapagal Review ang bawat explanation at may actual real-life scenarios kapag nag-e-explain.",
   },
 ];
 
@@ -312,7 +340,10 @@ export default function Home() {
                     className="mt-4 block h-px w-full bg-[rgba(15,23,42,0.08)]"
                   />
                   <p className="mt-auto font-heading text-6xl font-semibold leading-none text-brand-black sm:text-7xl">
-                    {glanceMetrics[0].value}
+                    <CountUp
+                      value={glanceMetrics[0].value}
+                      suffix={glanceMetrics[0].suffix}
+                    />
                   </p>
                   <p className="mt-4 max-w-52 text-sm leading-5 text-foreground-muted">
                     {glanceMetrics[0].caption}
@@ -332,7 +363,7 @@ export default function Home() {
                         className="mt-3 block h-px w-full bg-[rgba(15,23,42,0.08)]"
                       />
                       <p className="mt-auto font-heading text-4xl font-semibold leading-none text-brand-black sm:text-5xl">
-                        {metric.value}
+                        <CountUp value={metric.value} suffix={metric.suffix} />
                       </p>
                       <p className="mt-3 max-w-52 text-xs leading-5 text-foreground-muted sm:text-sm">
                         {metric.caption}
@@ -361,7 +392,7 @@ export default function Home() {
                   Programs built for
                 </span>
                 <span className="block whitespace-nowrap">
-                  one-take readiness
+                  one take readiness
                 </span>
               </h2>
             </div>
@@ -517,11 +548,11 @@ export default function Home() {
           <Reveal className="mb-10 flex flex-col gap-6 sm:mb-12 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="mb-4 text-sm font-normal italic text-brand-black">
-                Topnotcher Success Stories
+                Success Stories
               </p>
               <h2 className="max-w-3xl font-heading text-[2.35rem] font-semibold leading-tight text-brand-black sm:text-5xl lg:text-[3.55rem] lg:leading-[0.98]">
-                <span className="block">Topnotcher results</span>
-                <span className="block">built through focused preparation</span>
+                <span className="block">Top the boards with</span>
+                <span className="block">proven methods and guidance</span>
               </h2>
             </div>
           </Reveal>

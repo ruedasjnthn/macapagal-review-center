@@ -260,7 +260,7 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
             dragStateRef.current.moved = false;
           }
         }}
-        className={`mt-6 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-7 ${
+        className={`mt-6 overflow-x-auto overflow-y-hidden overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-7 ${
           isDragging ? "cursor-grabbing snap-none select-none" : "cursor-grab snap-x"
         }`}
       >

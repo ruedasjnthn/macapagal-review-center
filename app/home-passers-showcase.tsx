@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   Award,
   ChevronDown,
@@ -19,10 +18,6 @@ export type HomePasser = {
   credential: string;
   story: string;
   storyType: "testimonial" | "achievement";
-  image?: {
-    src: string;
-    alt: string;
-  };
 };
 
 type HomePassersShowcaseProps = {
@@ -188,9 +183,9 @@ export function HomePassersShowcase({ passers }: HomePassersShowcaseProps) {
         animate={{ opacity: 1, x: 0 }}
         exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: direction * -10 }}
         transition={{ duration: 0.28 }}
-        className="mt-8 flex flex-row items-end justify-between gap-5 border-t border-[rgba(11,11,11,0.12)] pt-7 sm:mt-10 sm:items-start sm:gap-x-12 sm:pt-8 lg:mt-12 lg:gap-x-20"
+        className="mt-8 border-t border-[rgba(11,11,11,0.12)] pt-7 sm:mt-10 sm:pt-8 lg:mt-12"
       >
-        <div className="min-w-0 flex-1">
+        <div className="max-w-4xl">
           <h3 className="font-heading text-xl font-semibold leading-tight text-brand-black sm:text-3xl">
             {activePasser.name}
           </h3>
@@ -207,18 +202,6 @@ export function HomePassersShowcase({ passers }: HomePassersShowcaseProps) {
           </p>
         </div>
 
-        {activePasser.image ? (
-          <div className="relative aspect-square w-28 flex-none overflow-hidden rounded-sm border border-[rgba(11,11,11,0.1)] bg-[#f2f2f0] sm:w-40 sm:self-start">
-            <Image
-              src={activePasser.image.src}
-              alt={activePasser.image.alt}
-              width={1600}
-              height={1600}
-              sizes="(min-width: 640px) 160px, 112px"
-              className="size-full object-cover"
-            />
-          </div>
-        ) : null}
       </motion.div>
       </AnimatePresence>
     </article>
