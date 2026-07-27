@@ -1,99 +1,67 @@
-export type ProgramCode = "REE" | "RME";
-
-export type StudyMode = {
-  title: "Full Online" | "Hybrid" | "Full Face-to-Face";
-  bestFor: string;
-  setup: string;
-  support: string;
+export type ReviewPackage = {
+  title: string;
+  tagline: string;
+  duration: string;
+  courses: string[];
 };
 
 export type ProgramDetail = {
-  code: ProgramCode;
-  path: string;
   title: string;
   fullName: string;
   description: string;
   metrics: { label: string; value: string }[];
   overview: string[];
-  modes: StudyMode[];
-  inclusions: string[];
+  packages: ReviewPackage[];
 };
 
-const sharedMetrics = [
-  { label: "Successful passers", value: "000+" },
-  { label: "Review batches", value: "00+" },
-  { label: "Study modes", value: "3" },
+const reeMetrics = [
+  { label: "Review packages", value: "3" },
+  { label: "Complete review path", value: "5 mo" },
+  { label: "Focused final coaching", value: "2 wk" },
 ];
 
-const sharedStudyModes: StudyMode[] = [
+const reePackages: ReviewPackage[] = [
   {
-    title: "Full Online",
-    bestFor: "Reviewees who need a remote setup with a structured study rhythm.",
-    setup:
-      "Online-led review sessions, digital coordination, and guided independent study.",
-    support:
-      "Students stay connected through batch updates, review guidance, and practice checkpoints.",
-  },
-  {
-    title: "Hybrid",
-    bestFor:
-      "Students who want online flexibility with selected face-to-face review support.",
-    setup:
-      "A blended path for remote preparation plus scheduled in-person reinforcement.",
-    support:
-      "Designed for students who need structure while balancing location, school, or work demands.",
-  },
-  {
-    title: "Full Face-to-Face",
-    bestFor:
-      "Reviewees who learn best through classroom routines and direct in-person guidance.",
-    setup:
-      "On-site review sessions with guided discussion, practice, and review-center coordination.",
-    support:
-      "Students get a more consistent classroom environment for questions, drills, and accountability.",
-  },
-];
-
-const sharedInclusions = [
-  "Core lecture refreshers",
-  "Review materials and study guides",
-  "Board-style problem solving",
-  "Timed drills and practice sets",
-  "Mock exam preparation",
-  "Batch coordination and announcements",
-  "Coaching and review guidance",
-  "Enrollment assistance",
-];
-
-export const programDetails: Record<ProgramCode, ProgramDetail> = {
-  REE: {
-    code: "REE",
-    path: "/ree-program",
-    title: "REE Review Program",
-    fullName: "Registered Electrical Engineer",
-    description:
-      "A structured review path for electrical engineering graduates preparing for REE board exam readiness.",
-    metrics: sharedMetrics,
-    overview: [
-      "The REE Review Program is built for electrical engineering graduates who need a clear route from refresher study to board-style practice.",
-      "Students work through fundamentals, problem-solving routines, timed preparation, and guided review support so they can prepare with more structure and confidence.",
+    title: "Complete Board Review Program",
+    tagline: "Complete preparation from regular review through final coaching",
+    duration: "Five months",
+    courses: [
+      "Regular Review Course",
+      "Mock Board Exam 1",
+      "Refresher Review Course",
+      "Mock Board Exam 2",
+      "Final Coaching",
     ],
-    modes: sharedStudyModes,
-    inclusions: sharedInclusions,
   },
-  RME: {
-    code: "RME",
-    path: "/rme-program",
-    title: "RME Review Program",
-    fullName: "Registered Master Electrician",
-    description:
-      "A focused preparation track for master electrician candidates who need guided review, practice, and board-style readiness.",
-    metrics: sharedMetrics,
-    overview: [
-      "The RME Review Program is designed for candidates preparing for the Registered Master Electrician board exam with a practical and guided study flow.",
-      "Students get structured refreshers, practice support, and review-center guidance to keep preparation organized from enrollment through final review.",
+  {
+    title: "Refresher Review Program",
+    tagline: "For reviewees joining closer to the board exam",
+    duration: "Two months",
+    courses: [
+      "Refresher Review Course",
+      "Mock Board Exam 2",
+      "Final Coaching",
+      "Mastery Classes",
     ],
-    modes: sharedStudyModes,
-    inclusions: sharedInclusions,
   },
+  {
+    title: "Final Coaching and Mastery Program",
+    tagline: "For reviewees seeking focused preparation just before exam day",
+    duration: "Two weeks",
+    courses: ["Final Coaching", "Mastery Classes"],
+  },
+];
+
+export const reeProgram: ProgramDetail = {
+  title: "REE Review Program",
+  fullName: "Registered Electrical Engineer",
+  description:
+    "A structured review path for electrical engineering graduates preparing for REE board exam readiness.",
+  metrics: reeMetrics,
+  overview: [
+    "The REE Review Program is built around one-take readiness. Students learn current, efficient approaches that reach the solution without relying on unnecessarily long ten-step methods, while still strengthening the concepts behind every answer.",
+    "Questionnaires are regularly created and refreshed by the review center's owner, giving students relevant practice sets instead of depending on the same recycled questions from one review cycle to the next.",
+    "The Macapagal LMS keeps lecture recordings, reviewers, exam drills, evaluation results, and study materials together in one student workspace, making it easier to find what to study and stay organized throughout the review.",
+  ],
+  packages: reePackages,
 };

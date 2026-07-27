@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { programDetails } from "../program-detail-data";
+import { reeProgram } from "../program-detail-data";
 import { ProgramDetailPage } from "../program-detail-page";
 
-const program = programDetails.REE;
+const program = reeProgram;
 
 export const metadata: Metadata = {
   title: `${program.title} | Macapagal Review Center`,

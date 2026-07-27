@@ -1,18 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { X } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { FACEBOOK_PAGE_URL } from "./site-links";
 
 const PROMO_SESSION_KEY = "macapagal-early-bird-promo-dismissed";
-const FACEBOOK_RESERVATION_URL =
-  "https://www.facebook.com/MacapagalReviewAndTrainingCenter";
 
 export function EarlyBirdPromoModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+
+  const dismissModal = useCallback(() => {
+    window.sessionStorage.setItem(PROMO_SESSION_KEY, "true");
+    setIsOpen(false);
+  }, []);
 
   useEffect(() => {
     if (window.sessionStorage.getItem(PROMO_SESSION_KEY) !== "true") {
-      setIsOpen(true);
+      const animationFrame = window.requestAnimationFrame(() => setIsOpen(true));
+
+      return () => window.cancelAnimationFrame(animationFrame);
     }
   }, []);
 
@@ -32,36 +40,37 @@ export function EarlyBirdPromoModal() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen]);
-
-  const dismissModal = () => {
-    window.sessionStorage.setItem(PROMO_SESSION_KEY, "true");
-    setIsOpen(false);
-  };
-
-  if (!isOpen) {
-    return null;
-  }
+  }, [dismissModal, isOpen]);
 
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-brand-black/70 px-4 py-6 backdrop-blur-sm sm:px-6"
-      onClick={dismissModal}
-    >
-      <section
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="early-bird-promo-title"
-        aria-describedby="early-bird-promo-description"
-        className="relative w-full max-w-[34rem] overflow-hidden rounded-[1.5rem] border border-white/10 bg-brand-black p-6 text-foreground-inverse shadow-[0_30px_90px_rgba(0,0,0,0.55)] sm:p-8"
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
-      >
+    <AnimatePresence>
+      {isOpen ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-brand-black/70 px-4 py-6 backdrop-blur-sm sm:px-6"
+          onClick={dismissModal}
+        >
+          <motion.section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="early-bird-promo-title"
+            aria-describedby="early-bird-promo-description"
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 18, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.99 }}
+            transition={{ duration: 0.32 }}
+            className="relative w-full max-w-[34rem] overflow-hidden rounded-[1.5rem] border border-white/10 bg-brand-black p-6 text-foreground-inverse shadow-[0_30px_90px_rgba(0,0,0,0.55)] sm:p-8"
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
         <button
           type="button"
           aria-label="Close early bird promo"
-          className="absolute right-4 top-4 flex size-9 items-center justify-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-brand-gold hover:text-brand-gold"
+          className="motion-press absolute right-4 top-4 flex size-9 items-center justify-center rounded-full border border-white/10 text-white/70 hover:border-brand-gold hover:text-brand-gold"
           onClick={dismissModal}
         >
           <X aria-hidden="true" className="size-4" strokeWidth={1.8} />
@@ -88,15 +97,17 @@ export function EarlyBirdPromoModal() {
         </p>
 
         <a
-          href={FACEBOOK_RESERVATION_URL}
+          href={FACEBOOK_PAGE_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-surface px-6 py-3 text-sm font-bold text-brand-black transition-colors hover:bg-brand-gold sm:w-auto"
+          className="motion-press mt-8 inline-flex w-full items-center justify-center rounded-full bg-surface px-6 py-3 text-sm font-bold text-brand-black hover:bg-brand-gold sm:w-auto"
           onClick={dismissModal}
         >
           Reserve My Slot
         </a>
-      </section>
-    </div>
+          </motion.section>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   );
 }
