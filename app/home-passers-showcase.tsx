@@ -194,12 +194,16 @@ export function HomePassersShowcase({ passers }: HomePassersShowcaseProps) {
               {activePasser.school}
             </p>
           ) : null}
-          <p className="mt-4 text-sm font-semibold uppercase text-brand-black">
-            {activePasser.batch}
-          </p>
-          <p className="mt-1 text-sm font-semibold uppercase text-brand-black">
-            {activePasser.credential}
-          </p>
+          {activePasser.batch ? (
+            <p className="mt-4 text-sm font-semibold uppercase text-brand-black">
+              {activePasser.batch}
+            </p>
+          ) : null}
+          {activePasser.credential ? (
+            <p className="mt-1 text-sm font-semibold uppercase text-brand-black">
+              {activePasser.credential}
+            </p>
+          ) : null}
         </div>
 
       </motion.div>

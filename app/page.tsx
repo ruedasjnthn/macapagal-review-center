@@ -88,7 +88,7 @@ const secondaryProgram = {
     "Focused preparation for master electrician candidates through guided refreshers, practical drills, and board-style practice.",
 };
 
-const successProofs: HomePasser[] = [
+const fallbackSuccessProofs: HomePasser[] = [
   {
     name: "Engr. Cedie Mara A. Magno",
     school: "University of the Philippines Los Baños · Batch 2024",
@@ -153,6 +153,190 @@ const successProofs: HomePasser[] = [
       "During my review, malaking tulong po ang mga reliable practice exams and pagiging kalmado ni Engr. Jervin sa pagtuturo. May 24/7 chat support at kahit anong itanong tungkol sa review and pag-file ng boards ay masasagot. The learning environment ay nakakaboost ng morale at nakakasipag dahil nahihimay-himay ang bawat discussion. Solid talaga sa Macapagal Review ang bawat explanation at may actual real-life scenarios kapag nag-e-explain.",
   },
 ];
+
+const PASSERS_GRAPHQL_URL = "https://portal.macapagalreview.com/graphql";
+
+const GET_PASSERS = `
+  query GetPassers {
+    passers(first: 100) {
+      nodes {
+        title
+        achievement
+        ranking
+        school
+        batchYear
+        testimonial
+      }
+    }
+  }
+`;
+
+const GET_HOMEPAGE_HERO = `
+  query GetHomepageHero {
+    homepageContents(first: 1) {
+      nodes {
+        heroDesktopImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        heroMobileImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+      }
+    }
+  }
+`;
+
+type PassersResponse = {
+  data?: {
+    passers?: {
+      nodes?: Array<{
+        title?: string | null;
+        achievement?: string | null;
+        ranking?: string | null;
+        school?: string | null;
+        batchYear?: string | number | null;
+        testimonial?: string | null;
+      }>;
+    };
+  };
+  errors?: Array<{ message: string }>;
+};
+
+type HomepageHeroResponse = {
+  data?: {
+    homepageContents?: {
+      nodes?: Array<{
+        heroDesktopImage?: {
+          node?: { sourceUrl?: string | null; altText?: string | null } | null;
+        } | null;
+        heroMobileImage?: {
+          node?: { sourceUrl?: string | null; altText?: string | null } | null;
+        } | null;
+      }>;
+    };
+  };
+  errors?: Array<{ message: string }>;
+};
+
+type HeroImage = {
+  src: string;
+  alt: string;
+};
+
+type HomepageHeroImages = {
+  desktop: HeroImage;
+  mobile: HeroImage;
+};
+
+const fallbackHeroImages: HomepageHeroImages = {
+  desktop: {
+    src: "/macapagal-hero.png",
+    alt: "Macapagal Review and Training Center one-take REE and RME passers banner",
+  },
+  mobile: {
+    src: "/macapagal-hero-mobile.png",
+    alt: "Macapagal Review and Training Center one-take REE and RME passers",
+  },
+};
+
+async function getHomePassers(): Promise<HomePasser[]> {
+  try {
+    const response = await fetch(PASSERS_GRAPHQL_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: GET_PASSERS }),
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Passers API returned ${response.status}`);
+    }
+
+    const payload = (await response.json()) as PassersResponse;
+
+    if (payload.errors?.length) {
+      throw new Error(payload.errors.map(({ message }) => message).join("; "));
+    }
+
+    const passers = (payload.data?.passers?.nodes ?? [])
+      .filter(
+        (passer) =>
+          Boolean(passer.title?.trim()) && Boolean(passer.testimonial?.trim()),
+      )
+      .map(
+        (passer): HomePasser => ({
+          name: passer.title!.trim(),
+          school: [
+            passer.school?.trim(),
+            passer.batchYear ? `Batch ${passer.batchYear}` : undefined,
+          ]
+            .filter(Boolean)
+            .join(" · "),
+          batch: passer.achievement?.trim() || "",
+          credential: passer.ranking?.trim() || "",
+          story: passer.testimonial!
+            .replace(/<[^>]*>/g, " ")
+            .replace(/&nbsp;/gi, " ")
+            .replace(/&amp;/gi, "&")
+            .replace(/&quot;/gi, '"')
+            .replace(/&#(?:0*39|x0*27);/gi, "'")
+            .replace(/\s+/g, " ")
+            .trim(),
+          storyType: "testimonial",
+        }),
+      );
+
+    return passers.length > 0 ? passers : fallbackSuccessProofs;
+  } catch (error) {
+    console.error("Unable to load homepage passers from GraphQL:", error);
+    return fallbackSuccessProofs;
+  }
+}
+
+async function getHomepageHeroImages(): Promise<HomepageHeroImages> {
+  try {
+    const response = await fetch(PASSERS_GRAPHQL_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: GET_HOMEPAGE_HERO }),
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Homepage content API returned ${response.status}`);
+    }
+
+    const payload = (await response.json()) as HomepageHeroResponse;
+
+    if (payload.errors?.length) {
+      throw new Error(payload.errors.map(({ message }) => message).join("; "));
+    }
+
+    const content = payload.data?.homepageContents?.nodes?.[0];
+    const desktop = content?.heroDesktopImage?.node;
+    const mobile = content?.heroMobileImage?.node;
+
+    return {
+      desktop: {
+        src: desktop?.sourceUrl?.trim() || fallbackHeroImages.desktop.src,
+        alt: desktop?.altText?.trim() || fallbackHeroImages.desktop.alt,
+      },
+      mobile: {
+        src: mobile?.sourceUrl?.trim() || fallbackHeroImages.mobile.src,
+        alt: mobile?.altText?.trim() || fallbackHeroImages.mobile.alt,
+      },
+    };
+  } catch (error) {
+    console.error("Unable to load homepage hero images from GraphQL:", error);
+    return fallbackHeroImages;
+  }
+}
 
 const footerLinkGroups = [
   {
@@ -268,7 +452,12 @@ function WhyChooseIcon({ name }: { name: WhyChooseIconName }) {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const [successProofs, heroImages] = await Promise.all([
+    getHomePassers(),
+    getHomepageHeroImages(),
+  ]);
+
   return (
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
       <EarlyBirdPromoModal />
@@ -282,8 +471,8 @@ export default function Home() {
 
           <HeroReveal className="relative aspect-[3/4] w-full overflow-hidden rounded-[1.5rem] border border-white/10 bg-brand-black sm:rounded-[2rem] lg:aspect-auto">
             <Image
-              src="/macapagal-hero-mobile.png"
-              alt="Macapagal Review and Training Center one-take REE and RME passers"
+              src={heroImages.mobile.src}
+              alt={heroImages.mobile.alt}
               width={1086}
               height={1448}
               priority
@@ -291,8 +480,8 @@ export default function Home() {
               className="block h-full w-full object-cover lg:hidden"
             />
             <Image
-              src="/macapagal-hero.png"
-              alt="Macapagal Review and Training Center one-take REE and RME passers banner"
+              src={heroImages.desktop.src}
+              alt={heroImages.desktop.alt}
               width={1672}
               height={941}
               priority

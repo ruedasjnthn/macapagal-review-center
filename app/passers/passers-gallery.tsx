@@ -14,17 +14,22 @@ import {
 
 export type PasserProgram = "REE" | "RME";
 
+export type PasserImage = {
+  id: string;
+  src: string;
+  alt: string;
+};
+
 export type PasserBatch = {
   id: string;
   program: PasserProgram;
   title: string;
   sortDate: string;
-  imageFolder: string;
+  images: PasserImage[];
 };
 
 type PassersGalleryProps = {
   batches: PasserBatch[];
-  imageFolders: Record<string, string[]>;
 };
 
 const PAGE_SIZE = 5;
@@ -36,7 +41,7 @@ const programTabs: { value: PasserProgram; label: string }[] = [
 
 type PasserBatchCarouselProps = {
   batch: PasserBatch;
-  images: string[];
+  images: PasserImage[];
 };
 
 function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
@@ -264,15 +269,15 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
           isDragging ? "cursor-grabbing snap-none select-none" : "cursor-grab snap-x"
         }`}
       >
-        <ul className="flex gap-4 pb-2 pr-5 sm:pr-8 lg:pr-12">
-          {images.map((src, imageIndex) => (
+        <ul className="flex gap-2 pb-2 pr-5 sm:gap-4 sm:pr-8 lg:pr-12">
+          {images.map((image, imageIndex) => (
             <motion.li
-              key={`${batch.id}-${src}-${imageIndex}`}
+              key={`${batch.id}-${image.id}`}
               initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.35 }}
               transition={{ duration: 0.42, delay: Math.min(imageIndex * 0.04, 0.24) }}
-              className="w-[min(76vw,20rem)] flex-none snap-start sm:w-[18rem] lg:w-[20rem]"
+              className="w-[calc((100vw-5.5rem)/3)] flex-none snap-start sm:w-[18rem] lg:w-[20rem]"
             >
               <button
                 type="button"
@@ -281,11 +286,11 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
                 className="motion-press group relative block aspect-square w-full overflow-hidden rounded-lg bg-background-muted text-left ring-1 ring-[rgba(11,11,11,0.08)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-black"
               >
                 <Image
-                  src={src}
-                  alt={`${batch.title} passer ${imageIndex + 1}`}
+                  src={image.src}
+                  alt={image.alt}
                   fill
                   draggable={false}
-                  sizes="(min-width: 1024px) 20rem, (min-width: 640px) 18rem, 76vw"
+                  sizes="(min-width: 1024px) 20rem, (min-width: 640px) 18rem, calc((100vw - 5.5rem) / 3)"
                   className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none"
                 />
                 <span className="absolute bottom-3 right-3 flex size-9 items-center justify-center rounded-full bg-surface/95 text-brand-black opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
@@ -296,10 +301,6 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
           ))}
         </ul>
       </div>
-
-      <p className="mt-3 text-xs text-foreground-muted md:hidden">
-        Swipe to browse · Tap an image to expand
-      </p>
 
       <AnimatePresence>
       {lightboxIndex !== null ? (
@@ -341,7 +342,7 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
           <div className="relative mx-auto mt-4 h-[min(76vh,54rem)] w-full max-w-6xl flex-1 overflow-hidden">
             <AnimatePresence mode="wait" initial={false} custom={lightboxDirection}>
               <motion.div
-                key={images[lightboxIndex]}
+                key={images[lightboxIndex].id}
                 initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: lightboxDirection * 18 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: lightboxDirection * -14 }}
@@ -349,8 +350,8 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
                 className="absolute inset-0"
               >
                 <Image
-                  src={images[lightboxIndex]}
-                  alt={`${batch.title} passer ${lightboxIndex + 1}`}
+                  src={images[lightboxIndex].src}
+                  alt={images[lightboxIndex].alt}
                   fill
                   priority
                   sizes="92vw"
@@ -358,10 +359,9 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
                 />
               </motion.div>
             </AnimatePresence>
-          </div>
 
-          {images.length > 1 ? (
-            <div className="mx-auto mt-4 flex w-full max-w-7xl items-center justify-center gap-3">
+            {images.length > 1 ? (
+              <>
               <button
                 type="button"
                 aria-label="View previous image"
@@ -371,10 +371,9 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
                     (lightboxIndex - 1 + images.length) % images.length,
                   );
                 }}
-                className="motion-press inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 text-sm font-semibold text-white hover:bg-white hover:text-brand-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="motion-press absolute left-1 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-brand-black/55 text-white shadow-lg backdrop-blur-sm hover:bg-white hover:text-brand-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:left-4 sm:size-12"
               >
-                <ChevronLeft aria-hidden="true" className="size-4" strokeWidth={1.8} />
-                Previous
+                <ChevronLeft aria-hidden="true" className="size-5" strokeWidth={1.8} />
               </button>
               <button
                 type="button"
@@ -383,13 +382,13 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
                   setLightboxDirection(1);
                   setLightboxIndex((lightboxIndex + 1) % images.length);
                 }}
-                className="motion-press inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2.5 text-sm font-semibold text-brand-black hover:bg-brand-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="motion-press absolute right-1 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-brand-black/55 text-white shadow-lg backdrop-blur-sm hover:bg-white hover:text-brand-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:right-4 sm:size-12"
               >
-                Next
-                <ChevronRight aria-hidden="true" className="size-4" strokeWidth={1.8} />
+                <ChevronRight aria-hidden="true" className="size-5" strokeWidth={1.8} />
               </button>
-            </div>
-          ) : null}
+              </>
+            ) : null}
+          </div>
         </motion.div>
       ) : null}
       </AnimatePresence>
@@ -397,7 +396,7 @@ function PasserBatchCarousel({ batch, images }: PasserBatchCarouselProps) {
   );
 }
 
-export function PassersGallery({ batches, imageFolders }: PassersGalleryProps) {
+export function PassersGallery({ batches }: PassersGalleryProps) {
   const [activeProgram, setActiveProgram] = useState<PasserProgram>(
     batches[0]?.program ?? "REE",
   );
@@ -487,13 +486,17 @@ export function PassersGallery({ batches, imageFolders }: PassersGalleryProps) {
 
         <div className="divide-y divide-[rgba(11,11,11,0.12)]">
           {visibleBatches.map((batch) => {
-            const images = imageFolders[batch.imageFolder] ?? [];
-
             return (
-              <PasserBatchCarousel key={batch.id} batch={batch} images={images} />
+              <PasserBatchCarousel key={batch.id} batch={batch} images={batch.images} />
             );
           })}
         </div>
+
+        {batches.length === 0 ? (
+          <p className="py-16 text-center text-sm text-foreground-muted">
+            Passer images are temporarily unavailable. Please check back soon.
+          </p>
+        ) : null}
 
         {hasMore ? (
           <div className="mt-10 flex justify-center sm:mt-12">

@@ -1,11 +1,14 @@
-import { promises as fs } from "fs";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import path from "path";
 import { SiteHeader } from "../site-header";
 import { FACEBOOK_PAGE_URL } from "../site-links";
-import { PassersGallery, type PasserBatch } from "./passers-gallery";
+import {
+  PassersGallery,
+  type PasserBatch,
+  type PasserImage,
+  type PasserProgram,
+} from "./passers-gallery";
 import { StaggerGroup, StaggerItem } from "../motion-primitives";
 
 export const metadata: Metadata = {
@@ -31,133 +34,125 @@ const footerLinkGroups = [
   },
 ];
 
-const imageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
+const PASSERS_GRAPHQL_URL = "https://portal.macapagalreview.com/graphql";
 
-const passerBatches: PasserBatch[] = [
-  {
-    id: "april-2026-reele",
-    program: "REE",
-    title: "April 2026 REELE Passers",
-    sortDate: "2026-04-30",
-    imageFolder: "ree/april-2026",
-  },
-  {
-    id: "august-2025-reele",
-    program: "REE",
-    title: "August 2025 REELE Passers",
-    sortDate: "2025-08-31",
-    imageFolder: "ree/august-2025",
-  },
-  {
-    id: "april-2025-reele",
-    program: "REE",
-    title: "April 2025 REELE Passers",
-    sortDate: "2025-04-30",
-    imageFolder: "ree/april-2025",
-  },
-  {
-    id: "august-2024-reele",
-    program: "REE",
-    title: "August 2024 REELE Passers",
-    sortDate: "2024-08-31",
-    imageFolder: "ree/august-2024",
-  },
-  {
-    id: "april-2024-reele",
-    program: "REE",
-    title: "April 2024 REELE Passers",
-    sortDate: "2024-04-30",
-    imageFolder: "ree/april-2024",
-  },
-  {
-    id: "september-2023-reele",
-    program: "REE",
-    title: "September 2023 REELE Passers",
-    sortDate: "2023-09-30",
-    imageFolder: "ree/september-2023",
-  },
-  {
-    id: "april-2023-reele",
-    program: "REE",
-    title: "April 2023 REELE Passers",
-    sortDate: "2023-04-30",
-    imageFolder: "ree/april-2023",
-  },
-  {
-    id: "september-2022-reele",
-    program: "REE",
-    title: "September 2022 REELE Passers",
-    sortDate: "2022-09-30",
-    imageFolder: "ree/september-2022",
-  },
-  {
-    id: "april-2022-reele",
-    program: "REE",
-    title: "April 2022 REELE Passers",
-    sortDate: "2022-04-30",
-    imageFolder: "ree/april-2022",
-  },
-  {
-    id: "september-2021-reele",
-    program: "REE",
-    title: "September 2021 REELE Passers",
-    sortDate: "2021-09-30",
-    imageFolder: "ree/september-2021",
-  },
-  {
-    id: "september-2022-rmele",
-    program: "RME",
-    title: "September 2022 RMELE Passers",
-    sortDate: "2022-09-30",
-    imageFolder: "rme/september-2022",
-  },
-  {
-    id: "april-2022-rmele",
-    program: "RME",
-    title: "April 2022 RMELE Passers",
-    sortDate: "2022-04-30",
-    imageFolder: "rme/april-2022",
-  },
-  {
-    id: "2021-rmele",
-    program: "RME",
-    title: "2021 RMELE Passers",
-    sortDate: "2021-12-31",
-    imageFolder: "rme/2021",
-  },
-];
+const GET_PASSER_BATCHES = `
+  query GetPasserBatches {
+    passerBatches(first: 100) {
+      nodes {
+        databaseId
+        title
+        passerType
+        passerImages(first: 100) {
+          nodes {
+            databaseId
+            sourceUrl
+            altText
+          }
+        }
+      }
+    }
+  }
+`;
 
-async function getPasserImages(folder: string) {
-  const directory = path.join(process.cwd(), "public", "passers", folder);
+type PasserImagesResponse = {
+  data?: {
+    passerBatches?: {
+      nodes?: Array<{
+        databaseId: number;
+        title: string;
+        passerType?: string | null;
+        passerImages?: {
+          nodes?: Array<{
+            databaseId: number;
+            sourceUrl: string;
+            altText?: string | null;
+          }>;
+        };
+      }>;
+    };
+  };
+  errors?: Array<{ message: string }>;
+};
 
+const monthNumbers: Record<string, string> = {
+  january: "01",
+  february: "02",
+  march: "03",
+  april: "04",
+  may: "05",
+  june: "06",
+  july: "07",
+  august: "08",
+  september: "09",
+  october: "10",
+  november: "11",
+  december: "12",
+};
+
+function getProgram(passerType: string | null | undefined, title: string): PasserProgram {
+  const normalizedPasserType = passerType?.trim().toUpperCase();
+
+  if (normalizedPasserType === "REE" || normalizedPasserType === "RME") {
+    return normalizedPasserType;
+  }
+
+  return /\bRME(?:LE)?\b/i.test(title) ? "RME" : "REE";
+}
+
+function getSortDate(title: string) {
+  const year = title.match(/\b(20\d{2})\b/)?.[1] ?? "0000";
+  const month = Object.entries(monthNumbers).find(([name]) =>
+    new RegExp(`\\b${name}\\b`, "i").test(title),
+  )?.[1] ?? "12";
+
+  return `${year}-${month}-31`;
+}
+
+async function getPasserBatches(): Promise<PasserBatch[]> {
   try {
-    const entries = await fs.readdir(directory, { withFileTypes: true });
-    const images = entries
-      .filter((entry) => {
-        const extension = path.extname(entry.name).toLowerCase();
+    const response = await fetch(PASSERS_GRAPHQL_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: GET_PASSER_BATCHES }),
+      next: { revalidate: 3600 },
+    });
 
-        return entry.isFile() && imageExtensions.has(extension);
-      })
-      .map((entry) => `/passers/${folder}/${entry.name}`)
-      .sort((first, second) => first.localeCompare(second));
+    if (!response.ok) {
+      throw new Error(`Passers API returned ${response.status}`);
+    }
 
-    return images;
-  } catch {
+    const payload = (await response.json()) as PasserImagesResponse;
+
+    if (payload.errors?.length) {
+      throw new Error(payload.errors.map(({ message }) => message).join("; "));
+    }
+
+    return (payload.data?.passerBatches?.nodes ?? [])
+      .map((batch): PasserBatch => ({
+        id: String(batch.databaseId),
+        program: getProgram(batch.passerType, batch.title),
+        title: batch.title,
+        sortDate: getSortDate(batch.title),
+        images: (batch.passerImages?.nodes ?? [])
+          .filter((image) => Boolean(image.sourceUrl))
+          .map(
+            (image): PasserImage => ({
+              id: String(image.databaseId),
+              src: image.sourceUrl,
+              alt: image.altText?.trim() || batch.title,
+            }),
+          ),
+      }))
+      .filter((batch) => batch.images.length > 0);
+  } catch (error) {
+    console.error("Unable to load passer images from GraphQL:", error);
     return [];
   }
 }
 
-async function getImageFolders(batches: PasserBatch[]) {
-  const folders = Array.from(new Set(batches.map((batch) => batch.imageFolder)));
-  const folderEntries = await Promise.all(
-    folders.map(async (folder) => [folder, await getPasserImages(folder)]),
-  );
-
-  return Object.fromEntries(folderEntries);
-}
-
 export default async function PassersPage() {
-  const imageFolders = await getImageFolders(passerBatches);
+  const passerBatches = await getPasserBatches();
 
   return (
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
@@ -192,7 +187,7 @@ export default async function PassersPage() {
         </div>
       </section>
 
-      <PassersGallery batches={passerBatches} imageFolders={imageFolders} />
+      <PassersGallery batches={passerBatches} />
 
       <footer className="bg-background px-3 pb-3 pt-4 sm:px-5 sm:pb-5 sm:pt-6 lg:px-8 lg:pb-8 lg:pt-4">
         <div className="relative mx-auto max-w-[92rem] overflow-hidden rounded-[1.5rem] bg-brand-black text-foreground-inverse ring-1 ring-white/10 sm:rounded-[2rem]">
