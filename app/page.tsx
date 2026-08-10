@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BadgeCheck, LayoutDashboard, PackageCheck, Target } from "lucide-react";
 import { CountUp } from "./count-up";
 import { EarlyBirdPromoModal } from "./early-bird-promo-modal";
 import { HomePassersShowcase, type HomePasser } from "./home-passers-showcase";
@@ -28,7 +29,11 @@ const glanceMetrics = [
   },
 ];
 
-type WhyChooseIconName = "license" | "structure" | "practice" | "guidance";
+type WhyChooseIconName =
+  | "one-take"
+  | "all-access"
+  | "license-guidance"
+  | "learning-platform";
 
 const whyChooseReasons: {
   number: string;
@@ -42,7 +47,7 @@ const whyChooseReasons: {
     title: "One Take Review Program",
     description:
       "Designed for every kind of board exam taker, from honor graduates to students rebuilding their foundations. With the right guidance and strategy, every reviewee gets a clear path toward topping or passing the board exam in one take.",
-    icon: "license",
+    icon: "one-take",
     placement: "lg:col-start-1 lg:col-end-4 lg:row-start-3 lg:self-end",
   },
   {
@@ -50,7 +55,7 @@ const whyChooseReasons: {
     title: "All In Access. No Additional Fees.",
     description:
       "Whether you enroll in face to face or online review, you receive unlimited access to live lecture recordings, evaluation exams, and online review materials through your personal dashboard. Everything is included at no extra cost.",
-    icon: "practice",
+    icon: "all-access",
     placement: "lg:col-start-4 lg:col-end-7 lg:row-start-3 lg:self-end",
   },
   {
@@ -58,7 +63,7 @@ const whyChooseReasons: {
     title: "Guidance Until You Get Your PRC License",
     description:
       "We stay with you from strategic review planning and PRC application filing through exam day, oath taking, and the steps after receiving your professional license.",
-    icon: "guidance",
+    icon: "license-guidance",
     placement: "lg:col-start-7 lg:col-end-10 lg:row-start-2 lg:self-start",
   },
   {
@@ -66,7 +71,7 @@ const whyChooseReasons: {
     title: "Your Review, Organized in One LMS",
     description:
       "Our dedicated learning platform brings your lectures, reviewers, exam drills, evaluation results, and study progress together in one student workspace.",
-    icon: "structure",
+    icon: "learning-platform",
     placement: "lg:col-start-10 lg:col-end-13 lg:row-start-3 lg:self-end",
   },
 ];
@@ -346,110 +351,18 @@ const footerLinkGroups = [
       { label: "Passers", href: "/passers" },
     ],
   },
-  {
-    title: "Connect",
-    links: [
-      { label: "Facebook", href: FACEBOOK_PAGE_URL, external: true },
-      { label: "mac21@gmail.com", href: "mailto:mac21@gmail.com", external: true },
-    ],
-  },
 ];
 
 function WhyChooseIcon({ name }: { name: WhyChooseIconName }) {
-  if (name === "license") {
-    return (
-      <svg
-        aria-hidden="true"
-        className="size-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      >
-        <path
-          d="m3 8 9-4 9 4-9 4-9-4Z"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M7 10v4.5c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V10"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path d="M21 8v5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-  }
+  const icons = {
+    "one-take": Target,
+    "all-access": PackageCheck,
+    "license-guidance": BadgeCheck,
+    "learning-platform": LayoutDashboard,
+  };
+  const Icon = icons[name];
 
-  if (name === "structure") {
-    return (
-      <svg
-        aria-hidden="true"
-        className="size-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      >
-        <path d="M5 5h6v6H5V5Z" strokeLinecap="round" strokeLinejoin="round" />
-        <path
-          d="M13 13h6v6h-6v-6Z"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M11 8h2a3 3 0 0 1 3 3v2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-  }
-
-  if (name === "practice") {
-    return (
-      <svg
-        aria-hidden="true"
-        className="size-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      >
-        <path
-          d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path d="M8 7h8" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M8 12h1" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M12 12h1" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M16 12h1" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M8 16h1" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M12 16h1" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M16 16h1" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg
-      aria-hidden="true"
-      className="size-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
-      <path
-        d="M4 5h16v11H8l-4 4V5Z"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M8 9h8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M8 13h5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  return <Icon aria-hidden="true" className="size-6" strokeWidth={1.7} />;
 }
 
 export default async function Home() {
@@ -498,7 +411,7 @@ export default async function Home() {
       >
         <div className="relative z-10 mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.82fr_1.38fr] lg:items-end">
           <Reveal className="lg:pb-6">
-            <h2 className="max-w-lg font-heading text-4xl font-semibold leading-tight text-foreground sm:text-5xl">
+            <h2 className="max-w-lg font-heading text-[2.2rem] font-semibold leading-tight text-foreground sm:text-5xl lg:text-[3.45rem] lg:leading-[0.98]">
               Macapagal at a glance
             </h2>
           </Reveal>
@@ -519,9 +432,9 @@ export default async function Home() {
               <Reveal className="sm:col-span-2 lg:col-span-1" delay={0.12}>
                 <article
                   key={glanceMetrics[0].title}
-                  className="flex min-h-[20rem] h-full flex-col rounded-lg border border-[rgba(185,147,90,0.10)] bg-[#fbfdff] p-6 sm:p-7"
+                  className="flex min-h-[20rem] h-full flex-col rounded-lg border border-accent-red/10 bg-[#fbfdff] p-6 sm:p-7"
                 >
-                  <h3 className="font-heading text-xl font-medium italic text-[#A98D63]">
+                  <h3 className="font-heading text-xl font-medium italic text-accent-red">
                     {glanceMetrics[0].title}
                   </h3>
                   <span
@@ -543,18 +456,18 @@ export default async function Home() {
               <div className="grid gap-4 sm:col-span-2 lg:col-span-1">
                 {glanceMetrics.slice(1).map((metric, index) => (
                   <Reveal key={metric.title} delay={0.18 + index * 0.07}>
-                    <article className="flex min-h-[9.5rem] h-full flex-col rounded-lg border border-[rgba(185,147,90,0.10)] bg-[#fbfdff] p-6 sm:p-7">
-                      <h3 className="font-heading text-lg font-medium italic text-[#A98D63]">
+                    <article className="flex min-h-[9.5rem] h-full flex-col rounded-lg border border-accent-red/10 bg-[#fbfdff] p-6 sm:p-7">
+                      <h3 className="font-heading text-lg font-medium italic text-accent-red">
                         {metric.title}
                       </h3>
                       <span
                         aria-hidden="true"
                         className="mt-3 block h-px w-full bg-[rgba(15,23,42,0.08)]"
                       />
-                      <p className="mt-auto font-heading text-4xl font-semibold leading-none text-brand-black sm:text-5xl">
+                      <p className="mt-5 font-heading text-4xl font-semibold leading-none text-brand-black sm:mt-6 sm:text-5xl">
                         <CountUp value={metric.value} suffix={metric.suffix} />
                       </p>
-                      <p className="mt-3 max-w-52 text-xs leading-5 text-foreground-muted sm:text-sm">
+                      <p className="mt-3 max-w-52 text-sm leading-6 text-foreground-muted">
                         {metric.caption}
                       </p>
                     </article>
@@ -576,11 +489,11 @@ export default async function Home() {
               <p className="mb-4 text-sm font-normal italic text-brand-black">
                 Our Programs
               </p>
-              <h2 className="max-w-xl font-heading text-[2rem] font-semibold leading-tight text-foreground sm:text-5xl">
-                <span className="block whitespace-nowrap">
+              <h2 className="max-w-xl font-heading text-[2.2rem] font-semibold leading-tight text-foreground sm:text-5xl lg:text-[3.45rem] lg:leading-[0.98]">
+                <span className="block sm:whitespace-nowrap">
                   Programs built for
                 </span>
-                <span className="block whitespace-nowrap">
+                <span className="block sm:whitespace-nowrap">
                   one take readiness
                 </span>
               </h2>
@@ -595,15 +508,12 @@ export default async function Home() {
             >
               <div className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full border border-white/10 transition-transform duration-500 group-hover:scale-110 motion-reduce:transform-none motion-reduce:transition-none sm:size-96" />
               <div className="relative z-10">
-                <p className="mb-6 text-xs font-semibold uppercase tracking-[0.18em] text-brand-gold-bright">
+                <p className="mb-6 text-sm font-normal italic text-foreground-inverse">
                   Featured program
                 </p>
                 <h3 className="max-w-2xl font-heading text-[2.65rem] font-semibold leading-[0.95] text-foreground-inverse sm:text-5xl lg:text-6xl">
                   {featuredProgram.title}
                 </h3>
-                <p className="mt-4 text-sm font-semibold text-white/65">
-                  {featuredProgram.fullName}
-                </p>
                 <p className="mt-7 max-w-2xl text-base leading-7 text-white/65 sm:text-lg">
                   {featuredProgram.description}
                 </p>
@@ -611,7 +521,7 @@ export default async function Home() {
 
               <Link
                 href={featuredProgram.href}
-                className="motion-press relative z-10 mt-12 inline-flex w-fit items-center gap-3 rounded-lg bg-surface py-2 pl-5 pr-2 text-sm font-semibold text-brand-black hover:bg-brand-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-gold"
+                className="motion-press group relative z-10 mt-12 inline-flex w-fit items-center gap-3 rounded-lg bg-accent-red py-2 pl-5 pr-2 text-sm font-bold text-accent-red-foreground hover:bg-accent-red-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-red"
               >
                 <span>View REE Program</span>
                 <span
@@ -631,20 +541,17 @@ export default async function Home() {
             >
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -bottom-16 -right-16 size-56 rounded-full border border-[rgba(222,201,159,0.14)] transition-transform duration-500 ease-out group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:scale-105 group-focus-within:-translate-x-1 group-focus-within:-translate-y-1 group-focus-within:scale-105 motion-reduce:transform-none motion-reduce:transition-none sm:-bottom-20 sm:-right-20 sm:size-64"
+                className="pointer-events-none absolute -bottom-16 -right-16 size-56 rounded-full border border-white/10 transition-transform duration-500 ease-out group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:scale-105 group-focus-within:-translate-x-1 group-focus-within:-translate-y-1 group-focus-within:scale-105 motion-reduce:transform-none motion-reduce:transition-none sm:-bottom-20 sm:-right-20 sm:size-64"
               />
 
               <div className="relative z-10">
-                <p className="mb-6 text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange">
+                <p className="mb-6 text-sm font-normal italic text-foreground-inverse">
                   Also available
                 </p>
                 <h3 className="font-heading text-3xl font-semibold leading-tight text-foreground-inverse sm:text-4xl">
                   {secondaryProgram.title}
                 </h3>
-                <p className="mt-3 text-sm font-semibold text-white/60">
-                  {secondaryProgram.fullName}
-                </p>
-                <p className="mt-6 text-sm leading-6 text-white/60">
+                <p className="mt-6 text-base leading-7 text-white/65">
                   {secondaryProgram.description}
                 </p>
               </div>
@@ -653,7 +560,7 @@ export default async function Home() {
                 href={FACEBOOK_PAGE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="motion-press relative z-10 mt-10 inline-flex w-fit items-center gap-3 rounded-lg bg-surface py-2 pl-5 pr-2 text-sm font-semibold text-brand-black hover:bg-brand-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-gold"
+                className="motion-press group relative z-10 mt-10 inline-flex w-fit items-center gap-3 rounded-lg bg-accent-red py-2 pl-5 pr-2 text-sm font-bold text-accent-red-foreground hover:bg-accent-red-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-red"
               >
                 <span>Ask About RME</span>
                 <span
@@ -678,21 +585,21 @@ export default async function Home() {
             <div className="relative z-10 mx-auto max-w-7xl">
               <div className="grid gap-6 lg:min-h-[36rem] lg:grid-cols-12 lg:grid-rows-[auto_minmax(12rem,1fr)_auto] lg:gap-x-4 lg:gap-y-8">
                 <Reveal className="lg:col-start-1 lg:col-end-8 lg:row-start-1">
-                  <p className="mb-4 text-xs font-normal italic text-foreground-inverse">
+                  <p className="mb-4 text-sm font-normal italic text-foreground-inverse">
                     Why choose us
                   </p>
-                  <h2 className="max-w-4xl font-heading text-[1.45rem] font-semibold leading-tight text-foreground-inverse sm:text-5xl lg:text-[3.55rem] lg:leading-[0.98]">
-                    <span className="block whitespace-nowrap">
+                  <h2 className="max-w-4xl font-heading text-[2.2rem] font-semibold leading-tight text-foreground-inverse sm:text-5xl lg:text-[3.45rem] lg:leading-[0.98]">
+                    <span className="block sm:whitespace-nowrap">
                       A complete path for
                     </span>
-                    <span className="block whitespace-nowrap">
+                    <span className="block sm:whitespace-nowrap">
                       one take readiness
                     </span>
                   </h2>
                 </Reveal>
 
                 <Reveal className="lg:col-start-3 lg:col-end-7 lg:row-start-2 lg:self-center" delay={0.08}>
-                  <p className="max-w-md text-sm leading-6 text-white/55 sm:text-base sm:leading-7">
+                  <p className="max-w-md text-base leading-7 text-white/65 sm:text-lg sm:leading-8">
                     More than a review center, Macapagal gives students a complete
                     support system. This includes a one take strategy, complete
                     resources, guidance from start to finish, and a dedicated
@@ -701,12 +608,16 @@ export default async function Home() {
                 </Reveal>
 
                 {whyChooseReasons.map((reason, index) => (
-                  <Reveal key={reason.number} className={reason.placement} delay={index * 0.07}>
+                  <Reveal
+                    key={reason.number}
+                    className={`${reason.placement} w-full`}
+                    delay={index * 0.07}
+                  >
                   <article
                     key={reason.number}
-                    className="relative flex h-full min-h-[10rem] flex-col rounded-lg border border-white/12 bg-brand-black p-5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-[background-color,border-color,box-shadow] duration-300 hover:border-white/20 hover:bg-[#151515] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] sm:p-6 lg:min-h-[20rem]"
+                    className="relative flex h-[28rem] w-full flex-col overflow-hidden rounded-lg border border-white/12 bg-brand-black p-5 pb-7 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-[background-color,border-color,box-shadow] duration-300 hover:border-white/20 hover:bg-[#151515] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] sm:p-6 sm:pb-8"
                   >
-                    <p className="text-xs font-semibold text-brand-gold-bright">
+                    <p className="text-xs font-semibold text-accent-red">
                       {reason.number}
                     </p>
 
@@ -714,10 +625,10 @@ export default async function Home() {
                       <WhyChooseIcon name={reason.icon} />
                     </div>
 
-                    <h3 className="mt-4 font-heading text-base font-semibold leading-tight text-foreground-inverse">
+                    <h3 className="mt-4 font-heading text-lg font-semibold leading-tight text-foreground-inverse sm:text-xl">
                       {reason.title}
                     </h3>
-                    <p className="mt-2 text-xs leading-5 text-white/55">
+                    <p className="mt-3 text-sm leading-6 text-white/65 sm:text-base sm:leading-7">
                       {reason.description}
                     </p>
                   </article>
@@ -739,7 +650,7 @@ export default async function Home() {
               <p className="mb-4 text-sm font-normal italic text-brand-black">
                 Success Stories
               </p>
-              <h2 className="max-w-3xl font-heading text-[2.35rem] font-semibold leading-tight text-brand-black sm:text-5xl lg:text-[3.55rem] lg:leading-[0.98]">
+              <h2 className="max-w-3xl font-heading text-[2.2rem] font-semibold leading-tight text-brand-black sm:text-5xl lg:text-[3.45rem] lg:leading-[0.98]">
                 <span className="block">Top the boards with</span>
                 <span className="block">proven methods and guidance</span>
               </h2>
@@ -789,7 +700,7 @@ export default async function Home() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-fit text-sm text-white/55 transition-colors hover:text-brand-gold"
+                        className="w-fit text-sm text-white/55 transition-colors hover:text-accent-red"
                       >
                         {link.label}
                       </a>
@@ -797,7 +708,7 @@ export default async function Home() {
                       <Link
                         key={`${group.title}-${link.label}`}
                         href={link.href}
-                        className="w-fit text-sm text-white/55 transition-colors hover:text-brand-gold"
+                        className="w-fit text-sm text-white/55 transition-colors hover:text-accent-red"
                       >
                         {link.label}
                       </Link>
@@ -806,6 +717,31 @@ export default async function Home() {
                 </nav>
               </div>
             ))}
+
+            <div>
+              <h2 className="text-sm font-semibold text-foreground-inverse">
+                Follow Us
+              </h2>
+              <div className="mt-4 flex items-center gap-5 text-sm font-semibold uppercase">
+                <a
+                  href={FACEBOOK_PAGE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/55 transition-colors hover:text-accent-red"
+                >
+                  Facebook
+                </a>
+              </div>
+              <p className="mt-7 text-xs font-semibold uppercase text-white/55">
+                Email Us
+              </p>
+              <a
+                href="mailto:business.jonathanruedas@gmail.com"
+                className="mt-3 block w-fit break-all text-sm font-semibold text-foreground-inverse transition-colors hover:text-accent-red"
+              >
+                business.jonathanruedas@gmail.com
+              </a>
+            </div>
           </div>
 
           <div

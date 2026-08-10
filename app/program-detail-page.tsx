@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Clock3 } from "lucide-react";
 import type { ProgramDetail } from "./program-detail-data";
 import { Reveal, StaggerGroup, StaggerItem } from "./motion-primitives";
 import { SiteHeader } from "./site-header";
 import { FACEBOOK_PAGE_URL } from "./site-links";
+import { HeroShapedImage } from "./hero-shaped-image";
 
 type ProgramDetailPageProps = {
   program: ProgramDetail;
@@ -17,13 +19,6 @@ const footerLinkGroups = [
       { label: "Passers", href: "/passers" },
     ],
   },
-  {
-    title: "Connect",
-    links: [
-      { label: "Facebook", href: FACEBOOK_PAGE_URL, external: true },
-      { label: "mac21@gmail.com", href: "mailto:mac21@gmail.com", external: true },
-    ],
-  },
 ];
 
 export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
@@ -35,36 +30,36 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
         <div className="relative mx-auto max-w-[92rem]">
           <SiteHeader activeItem="programs" />
 
-          <div className="relative w-full overflow-hidden rounded-[1.5rem] border border-white/10 bg-brand-black px-5 pb-10 pt-28 text-foreground-inverse sm:rounded-[2rem] sm:px-8 sm:pb-12 sm:pt-32 lg:px-12 lg:pb-14 lg:pt-36">
-            <StaggerGroup className="relative z-20 max-w-5xl">
+          <div className="relative flex w-full items-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-brand-black px-5 pb-10 pt-20 text-foreground-inverse sm:rounded-[2rem] sm:px-8 sm:pb-12 sm:pt-24 lg:aspect-[1672/941] lg:px-12 lg:py-14">
+            <HeroShapedImage
+              src="/program-hero-unsplash.jpg"
+              alt="University students attending a classroom lecture"
+              objectPosition="56% center"
+            />
+            <StaggerGroup className="relative z-20 mx-auto max-w-5xl text-center lg:mx-0 lg:max-w-[52%] lg:text-left">
               <StaggerItem>
-                <p className="mb-5 text-base font-semibold leading-tight text-brand-orange sm:text-2xl lg:text-3xl">
-                  {program.fullName}
-                </p>
-              </StaggerItem>
-              <StaggerItem>
-                <h1 className="max-w-5xl font-heading text-[2.55rem] font-black uppercase leading-[0.86] tracking-normal text-foreground-inverse sm:text-[4.75rem] lg:text-[6.8rem]">
+                <h1 className="max-w-5xl font-heading text-[2.75rem] font-black uppercase leading-[0.86] tracking-[-0.04em] text-foreground-inverse sm:text-[4.75rem] lg:text-[6.5rem]">
                   {program.title}
                 </h1>
               </StaggerItem>
               <StaggerItem>
-                <p className="mt-6 max-w-2xl text-base leading-7 text-white/60 sm:text-lg">
+                <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-white/60 sm:text-lg lg:mx-0">
                   {program.description}
                 </p>
               </StaggerItem>
 
-              <StaggerItem className="mt-8 flex flex-wrap gap-3">
+              <StaggerItem className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
                 <a
                   href={FACEBOOK_PAGE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="motion-press inline-flex items-center justify-center rounded-full bg-surface px-5 py-3 text-sm font-bold text-brand-black hover:bg-brand-gold"
+                  className="motion-press inline-flex min-h-12 items-center justify-center rounded-full bg-accent-red px-6 py-3 text-sm font-bold text-accent-red-foreground hover:bg-accent-red-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-red sm:px-7 sm:text-base"
                 >
                   Inquire Now
                 </a>
                 <Link
                   href="/passers"
-                  className="motion-press inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-3 text-sm font-bold text-foreground-inverse hover:border-brand-gold hover:text-brand-gold"
+                  className="motion-press inline-flex min-h-12 items-center justify-center rounded-full border border-white bg-white px-6 py-3 text-sm font-bold text-brand-black hover:border-accent-red hover:bg-accent-red hover:text-accent-red-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:px-7 sm:text-base"
                 >
                   View Passers
                 </Link>
@@ -125,13 +120,18 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
                 <article
                   className={`relative h-full overflow-hidden rounded-lg border p-6 sm:p-8 ${
                     isFeatured
-                      ? "border-brand-gold/40 bg-brand-black text-foreground-inverse"
+                      ? "border-accent-red/40 bg-brand-black text-foreground-inverse"
                       : "border-brand-black bg-brand-black text-foreground-inverse"
                   }`}
                 >
                   <div className="relative z-10">
                     <div className="flex justify-end">
-                      <p className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white/75">
+                      <p className="inline-flex items-center gap-2 text-xs font-semibold text-white/75">
+                        <Clock3
+                          aria-hidden="true"
+                          className="size-4 text-white"
+                          strokeWidth={1.7}
+                        />
                         {reviewPackage.duration}
                       </p>
                     </div>
@@ -153,26 +153,21 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
                         >
                           {reviewPackage.title}
                         </h3>
-                        <p className="mt-3 text-sm font-semibold text-white/60">
-                          {reviewPackage.tagline}
-                        </p>
                       </div>
 
                       <div className={isFeatured ? "" : "mt-10"}>
-                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-gold-bright">
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-white">
                           Course coverage
                         </p>
-                        <ol
-                          className="mt-4 grid border-t border-white/12"
-                        >
+                        <ol className="mt-4 grid border-t border-white/12">
                           {reviewPackage.courses.map((course, courseIndex) => (
                             <li
                               key={course}
-                              className="group flex min-h-16 items-center gap-4 border-b border-white/12 py-4 text-sm leading-6 text-white/70 transition-colors hover:text-white"
+                              className="group flex min-h-16 items-center gap-4 border-b border-white/12 py-4 text-sm leading-6 text-white/70 transition-colors last:border-b-0 hover:text-white"
                             >
                               <span
                                 aria-hidden="true"
-                                className="w-8 flex-none text-xs font-bold tracking-[0.14em] text-brand-gold-bright transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none"
+                                className="w-8 flex-none text-xs font-bold tracking-[0.14em] text-accent-red transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none"
                               >
                                 {String(courseIndex + 1).padStart(2, "0")}
                               </span>
@@ -207,7 +202,7 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
               href={FACEBOOK_PAGE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="motion-press inline-flex w-fit items-center justify-center rounded-full bg-surface px-6 py-3 text-sm font-bold text-brand-black hover:bg-brand-gold"
+              className="motion-press inline-flex w-fit items-center justify-center rounded-full bg-accent-red px-6 py-3 text-sm font-bold text-accent-red-foreground hover:bg-accent-red-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-red"
             >
               Inquire Now
             </a>
@@ -249,7 +244,7 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-fit text-sm text-white/55 transition-colors hover:text-brand-gold"
+                        className="w-fit text-sm text-white/55 transition-colors hover:text-accent-red"
                       >
                         {link.label}
                       </a>
@@ -257,7 +252,7 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
                       <Link
                         key={`${group.title}-${link.label}`}
                         href={link.href}
-                        className="w-fit text-sm text-white/55 transition-colors hover:text-brand-gold"
+                        className="w-fit text-sm text-white/55 transition-colors hover:text-accent-red"
                       >
                         {link.label}
                       </Link>
@@ -266,6 +261,31 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
                 </nav>
               </div>
             ))}
+
+            <div>
+              <h2 className="text-sm font-semibold text-foreground-inverse">
+                Follow Us
+              </h2>
+              <div className="mt-4 flex items-center gap-5 text-sm font-semibold uppercase">
+                <a
+                  href={FACEBOOK_PAGE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/55 transition-colors hover:text-accent-red"
+                >
+                  Facebook
+                </a>
+              </div>
+              <p className="mt-7 text-xs font-semibold uppercase text-white/55">
+                Email Us
+              </p>
+              <a
+                href="mailto:business.jonathanruedas@gmail.com"
+                className="mt-3 block w-fit break-all text-sm font-semibold text-foreground-inverse transition-colors hover:text-accent-red"
+              >
+                business.jonathanruedas@gmail.com
+              </a>
+            </div>
           </div>
 
           <div

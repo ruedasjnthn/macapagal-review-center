@@ -10,11 +10,12 @@ import {
   type PasserProgram,
 } from "./passers-gallery";
 import { StaggerGroup, StaggerItem } from "../motion-primitives";
+import { HeroShapedImage } from "../hero-shaped-image";
 
 export const metadata: Metadata = {
   title: "Passers | Macapagal Review Center",
   description:
-    "Browse Macapagal Review and Training Center passers by REE and RME batch.",
+    "Meet a selection of Macapagal Review and Training Center passers who chose to share their profiles and testimonials.",
 };
 
 const footerLinkGroups = [
@@ -23,13 +24,6 @@ const footerLinkGroups = [
     links: [
       { label: "REE Program", href: "/ree-program" },
       { label: "Passers", href: "/passers" },
-    ],
-  },
-  {
-    title: "Connect",
-    links: [
-      { label: "Facebook", href: FACEBOOK_PAGE_URL, external: true },
-      { label: "mac21@gmail.com", href: "mailto:mac21@gmail.com", external: true },
     ],
   },
 ];
@@ -160,26 +154,35 @@ export default async function PassersPage() {
         <div className="relative mx-auto max-w-[92rem]">
           <SiteHeader activeItem="passers" />
 
-          <div className="relative flex w-full flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-brand-black px-5 pb-10 pt-28 text-foreground-inverse sm:rounded-[2rem] sm:px-8 sm:pb-12 sm:pt-32 lg:px-12 lg:pb-14 lg:pt-36">
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/3 bg-gradient-to-t from-black via-brand-black/75 to-transparent" />
+          <div className="relative flex w-full items-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-brand-black px-5 pb-10 pt-20 text-foreground-inverse sm:rounded-[2rem] sm:px-8 sm:pb-12 sm:pt-24 lg:aspect-[1672/941] lg:px-12 lg:py-14">
+            <HeroShapedImage
+              src="/passers-hero-unsplash.jpg"
+              alt="A Southeast Asian graduate holding a diploma folder"
+              objectPosition="44% center"
+            />
 
-            <div className="relative z-20 mx-auto w-full max-w-7xl">
-              <StaggerGroup className="max-w-5xl">
+            <div className="relative z-20 mx-auto w-full max-w-7xl lg:mx-0">
+              <StaggerGroup className="mx-auto max-w-5xl text-center lg:mx-0 lg:max-w-[52%] lg:text-left">
                 <StaggerItem>
-                  <p className="mb-5 text-base font-semibold leading-tight text-brand-orange sm:text-2xl lg:text-3xl">
-                    Certified one-take results
-                  </p>
-                </StaggerItem>
-                <StaggerItem>
-                  <h1 className="max-w-5xl font-heading text-[3rem] font-black uppercase leading-[0.82] tracking-normal text-foreground-inverse sm:text-[5rem] lg:text-[7.5rem]">
+                  <h1 className="max-w-5xl font-heading text-[3rem] font-black uppercase leading-[0.84] tracking-[-0.045em] text-foreground-inverse sm:text-[5rem] lg:text-[7.25rem]">
                     Passers
                   </h1>
                 </StaggerItem>
                 <StaggerItem>
-                  <p className="mt-6 max-w-2xl text-base leading-7 text-white/60 sm:text-lg">
-                    A running gallery of Macapagal review passers, organized by
-                    program and batch.
+                  <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-white/60 sm:text-lg lg:mx-0">
+                    Meet a selection of Macapagal review passers who chose to
+                    share their profiles and testimonials.
                   </p>
+                </StaggerItem>
+                <StaggerItem className="mt-8 flex justify-center lg:justify-start">
+                  <a
+                    href={FACEBOOK_PAGE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="motion-press inline-flex min-h-12 items-center justify-center rounded-full bg-accent-red px-6 py-3 text-sm font-bold text-accent-red-foreground hover:bg-accent-red-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-red sm:px-7 sm:text-base"
+                  >
+                    Inquire Now
+                  </a>
                 </StaggerItem>
               </StaggerGroup>
             </div>
@@ -223,7 +226,7 @@ export default async function PassersPage() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-fit text-sm text-white/55 transition-colors hover:text-brand-gold"
+                        className="w-fit text-sm text-white/55 transition-colors hover:text-accent-red"
                       >
                         {link.label}
                       </a>
@@ -231,7 +234,7 @@ export default async function PassersPage() {
                       <Link
                         key={`${group.title}-${link.label}`}
                         href={link.href}
-                        className="w-fit text-sm text-white/55 transition-colors hover:text-brand-gold"
+                        className="w-fit text-sm text-white/55 transition-colors hover:text-accent-red"
                       >
                         {link.label}
                       </Link>
@@ -240,6 +243,31 @@ export default async function PassersPage() {
                 </nav>
               </div>
             ))}
+
+            <div>
+              <h2 className="text-sm font-semibold text-foreground-inverse">
+                Follow Us
+              </h2>
+              <div className="mt-4 flex items-center gap-5 text-sm font-semibold uppercase">
+                <a
+                  href={FACEBOOK_PAGE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/55 transition-colors hover:text-accent-red"
+                >
+                  Facebook
+                </a>
+              </div>
+              <p className="mt-7 text-xs font-semibold uppercase text-white/55">
+                Email Us
+              </p>
+              <a
+                href="mailto:business.jonathanruedas@gmail.com"
+                className="mt-3 block w-fit break-all text-sm font-semibold text-foreground-inverse transition-colors hover:text-accent-red"
+              >
+                business.jonathanruedas@gmail.com
+              </a>
+            </div>
           </div>
 
           <div

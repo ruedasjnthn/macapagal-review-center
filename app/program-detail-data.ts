@@ -24,7 +24,7 @@ const reePackages: ReviewPackage[] = [
   {
     title: "Complete Board Review Program",
     tagline: "Complete preparation from regular review through final coaching",
-    duration: "Five months",
+    duration: "5 months",
     courses: [
       "Regular Review Course",
       "Mock Board Exam 1",
@@ -36,7 +36,7 @@ const reePackages: ReviewPackage[] = [
   {
     title: "Refresher Review Program",
     tagline: "For reviewees joining closer to the board exam",
-    duration: "Two months",
+    duration: "2 months",
     courses: [
       "Refresher Review Course",
       "Mock Board Exam 2",
@@ -47,7 +47,7 @@ const reePackages: ReviewPackage[] = [
   {
     title: "Final Coaching and Mastery Program",
     tagline: "For reviewees seeking focused preparation just before exam day",
-    duration: "Two weeks",
+    duration: "2 weeks",
     courses: ["Final Coaching", "Mastery Classes"],
   },
 ];

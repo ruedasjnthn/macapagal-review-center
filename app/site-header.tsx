@@ -47,10 +47,10 @@ export function SiteHeader({
   }, [isMenuOpen]);
 
   const linkClassName = (value: NavigationItem) =>
-    `rounded-full px-3 py-2 text-[0.72rem] font-semibold transition-colors lg:px-4 lg:text-xs ${
+    `relative rounded-full px-3 py-2 text-[0.72rem] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-red lg:px-4 lg:text-xs ${
       value === activeItem
-        ? "text-brand-black"
-        : "text-foreground-muted hover:text-brand-orange"
+        ? "text-accent-red after:absolute after:bottom-0.5 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full after:bg-accent-red"
+        : "text-foreground-muted hover:text-accent-red"
     }`;
 
   return (
@@ -96,7 +96,7 @@ export function SiteHeader({
           href={FACEBOOK_PAGE_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="motion-press whitespace-nowrap rounded-full bg-brand-black px-3 py-2.5 text-[0.62rem] font-bold text-foreground-inverse shadow-sm hover:bg-brand-charcoal hover:text-brand-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-black sm:px-5 sm:text-xs"
+          className="motion-press hidden whitespace-nowrap rounded-full bg-accent-red px-5 py-2.5 text-xs font-bold text-accent-red-foreground shadow-sm hover:bg-accent-red-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-red md:inline-flex"
         >
           Inquire Now
         </a>
@@ -138,16 +138,25 @@ export function SiteHeader({
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`rounded-xl px-4 py-3 text-sm font-semibold transition-colors ${
+                  className={`rounded-xl px-4 py-3 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-red ${
                     isActive
-                      ? "bg-brand-black text-foreground-inverse"
-                      : "text-foreground-muted hover:bg-background-muted hover:text-brand-black"
+                      ? "text-accent-red"
+                      : "text-foreground-muted hover:text-accent-red"
                   }`}
                 >
                   {item.label}
                 </Link>
               );
             })}
+            <a
+              href={FACEBOOK_PAGE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsMenuOpen(false)}
+              className="motion-press mt-1 inline-flex items-center justify-center rounded-xl bg-accent-red px-4 py-3 text-sm font-bold text-accent-red-foreground hover:bg-accent-red-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+            >
+              Inquire Now
+            </a>
           </motion.nav>
         ) : null}
       </AnimatePresence>

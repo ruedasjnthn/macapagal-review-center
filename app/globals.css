@@ -4,9 +4,9 @@
   /* Brand */
   --color-brand-black: #0b0b0b;
   --color-brand-charcoal: #1a1a1a;
-  --color-brand-gold: #c8ad7d;
-  --color-brand-gold-bright: #dec99f;
-  --color-brand-orange: #b79b72;
+  --color-accent-red: #c9362b;
+  --color-accent-red-hover: #a92a23;
+  --color-accent-red-foreground: #ffffff;
 
   /* Backgrounds */
   --color-background: #fdfefe;
@@ -20,18 +20,18 @@
   --color-foreground-inverse: #ffffff;
 
   /* Borders */
-  --color-border: #ddd7cf;
-  --color-border-strong: #cdbb9f;
+  --color-border: #d8e0e6;
+  --color-border-strong: #b8c5ce;
 
   /* Semantic / UI */
   --color-primary: #0b0b0b;
   --color-primary-foreground: #ffffff;
 
-  --color-accent: #c8ad7d;
-  --color-accent-foreground: #111111;
+  --color-accent: #c9362b;
+  --color-accent-foreground: #ffffff;
 
-  --color-warning: #b79b72;
-  --color-warning-soft: #f4ecdf;
+  --color-warning: #c9362b;
+  --color-warning-soft: #fbe9e7;
 
   --color-success: #166534;
   --color-success-soft: #dcfce7;

@@ -70,13 +70,13 @@ export function EarlyBirdPromoModal() {
         <button
           type="button"
           aria-label="Close early bird promo"
-          className="motion-press absolute right-4 top-4 flex size-9 items-center justify-center rounded-full border border-white/10 text-white/70 hover:border-brand-gold hover:text-brand-gold"
+          className="motion-press absolute right-4 top-4 flex size-9 items-center justify-center rounded-full border border-white/10 text-white/70 hover:border-accent-red hover:text-accent-red"
           onClick={dismissModal}
         >
           <X aria-hidden="true" className="size-4" strokeWidth={1.8} />
         </button>
 
-        <p className="pr-12 text-sm font-normal italic text-brand-gold">
+        <p className="pr-12 text-sm font-normal italic text-accent-red">
           Early Bird Promo
         </p>
         <h2
@@ -89,7 +89,7 @@ export function EarlyBirdPromoModal() {
           id="early-bird-promo-description"
           className="mt-5 max-w-md text-base leading-7 text-white/70 sm:text-lg"
         >
-          Get <span className="font-semibold text-brand-gold">50% off</span>{" "}
+          Get <span className="font-semibold text-accent-red">50% off</span>{" "}
           when you reserve your slot for the next review batch.
         </p>
         <p className="mt-4 max-w-sm text-sm leading-6 text-white/50">
@@ -100,7 +100,7 @@ export function EarlyBirdPromoModal() {
           href={FACEBOOK_PAGE_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="motion-press mt-8 inline-flex w-full items-center justify-center rounded-full bg-surface px-6 py-3 text-sm font-bold text-brand-black hover:bg-brand-gold sm:w-auto"
+          className="motion-press mt-8 inline-flex w-full items-center justify-center rounded-full bg-accent-red px-6 py-3 text-sm font-bold text-accent-red-foreground hover:bg-accent-red-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-red sm:w-auto"
           onClick={dismissModal}
         >
           Reserve My Slot
