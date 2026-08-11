@@ -258,12 +258,12 @@ export default async function PassersPage() {
                   Facebook
                 </a>
               </div>
-              <p className="mt-7 text-xs font-semibold uppercase text-white/55">
+              <p className="mt-7 text-sm font-semibold text-foreground-inverse">
                 Email Us
               </p>
               <a
                 href="mailto:business.jonathanruedas@gmail.com"
-                className="mt-3 block w-fit break-all text-sm font-semibold text-foreground-inverse transition-colors hover:text-accent-red"
+                className="mt-4 block w-fit break-all text-sm font-normal uppercase text-white/55 transition-colors hover:text-accent-red"
               >
                 business.jonathanruedas@gmail.com
               </a>
